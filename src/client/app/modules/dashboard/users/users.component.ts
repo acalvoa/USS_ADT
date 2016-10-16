@@ -84,7 +84,7 @@ export class UsersComponent {
 		    err => console.error(err)
 		);
 	}
-	createUser(event){
+	createUser(event:any){
 		event.preventDefault();
 		this.rest.post(this.newuser, '/users').subscribe(
 		    data => {
