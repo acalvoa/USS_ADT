@@ -367,7 +367,8 @@ export class SeedConfig {
     base: this.PROJECT_ROOT,
     packageConfigPaths: [
       join('node_modules', '*', 'package.json'),
-      join('node_modules', '@angular', '*', 'package.json')
+      join('node_modules', '@angular', '*', 'package.json'),
+      join('node_modules', '@ng-bootstrap/ng-bootstrap', '*', 'package.json'),
     ],
     paths: {
       [join(this.TMP_DIR, 'app', '*')]: `${this.TMP_DIR}/app/*`,
@@ -375,6 +376,10 @@ export class SeedConfig {
     },
     packages: {
       '@angular/common': {
+        main: 'index.js',
+        defaultExtension: 'js'
+      },
+      '@ng-bootstrap/ng-bootstrap': {
         main: 'index.js',
         defaultExtension: 'js'
       },
