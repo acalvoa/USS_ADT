@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { LugaresComponent } from './lugares.component';
-import { UserService } from '../../../services/index';
+import { RestService } from '../../../services/index';
 import { DatatableModule } from '../../../shared/index';
 
 
@@ -9,7 +9,7 @@ import { DatatableModule } from '../../../shared/index';
     imports: [DatatableModule],
     declarations: [LugaresComponent],
     exports: [LugaresComponent],
-    providers: [UserService]
+    providers: [RestService]
 })
 
 export class LugaresModule { }
