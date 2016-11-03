@@ -104,15 +104,19 @@
             <li class="hidemenu" [class.expand]="showMenu === 'superadmin'">
                 <ul class="submenu">
                     <li>
+                    <!-- Administrar sedes -->
                         <a [routerLink]="['/sedes']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-university" aria-hidden="true"></i> &nbsp; Administrar Sedes</span></a>
                     </li>
                     <li>
-                        <a href ><span><i class="fa fa-building" aria-hidden="true"></i> &nbsp; Administrar Lugares</span></a>
+                    <!-- administrar lugares -->
+                        <a [routerLink]="['/lugares']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-building" aria-hidden="true"></i> &nbsp; Administrar Lugares</span></a>
+                    </li>
+                    <!-- administrar areas -->
+                    <li>
+                        <a [routerLink]="['/areas']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-cubes" aria-hidden="true"></i> &nbsp; Administrar Areas</span></a>
                     </li>
                     <li>
-                        <a href><span><i class="fa fa-cubes" aria-hidden="true"></i> &nbsp; Administrar Areas</span></a>
-                    </li>
-                    <li>
+                    <!-- administrar usuarios -->
                         <a [routerLink]="['/users']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-user-plus" aria-hidden="true"></i> &nbsp; Administrar Usuarios</span></a>
                     </li>
                 </ul>
