@@ -14,6 +14,8 @@ import { UsersRoutes } from './users/index';
 import { AreasRoutes } from './areas/index';
 import { LugaresRoutes } from './lugares/index';
 import { SedesRoutes } from './sedes/index';
+import { TareasRoutes } from './tareas/index';
+import { CategoriasRoutes } from './categorias/index';
 
 
 export const DashboardRoutes: Route[] = [
@@ -25,7 +27,9 @@ export const DashboardRoutes: Route[] = [
         ...UsersRoutes,
         ...SedesRoutes,
         ...AreasRoutes,
-        ...LugaresRoutes
+        ...LugaresRoutes,
+        ...TareasRoutes,
+        ...CategoriasRoutes
 	    	// ...ChartRoutes,
 	    	// ...BSComponentRoutes,
       //       ...TableRoutes,

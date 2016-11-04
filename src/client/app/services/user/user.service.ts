@@ -47,6 +47,7 @@ export class UserService {
 	    })
 		.map((res:Response) => {
 			let response = res.json();
+			console.log(response);
 			if(response.RESPONSE === 200) {
 				this.user = response.USER;
 				this.status = true;

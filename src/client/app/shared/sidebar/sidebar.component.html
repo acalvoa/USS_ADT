@@ -68,7 +68,7 @@
             <li class="hidemenu" [class.expand]="showMenu === 'tareas'">
                 <ul class="submenu">
                     <li>
-                        <a href><span>Crear Tarea</span></a>
+                        <a [routerLink]="['/tareas']" [routerLinkActive]="['router-link-active']" href><span>Administrar Tarea</span></a>
                     </li>
                     <li>
                         <a href><span>Programar Tarea</span></a>
@@ -97,7 +97,7 @@
                 </ul>
             </li>
         </div>
-        <div class="nested-menu">
+        <div class="nested-menu" *ngIf="admin">
             <a class="list-group-item" (click)="addExpandClass('superadmin')">
                 <span><i class="fa fa-user" aria-hidden="true"></i> &nbsp; Super Admin</span>
             </a>
@@ -116,9 +116,14 @@
                         <a [routerLink]="['/areas']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-cubes" aria-hidden="true"></i> &nbsp; Administrar Areas</span></a>
                     </li>
                     <li>
+                    <!-- administrar categorias base -->
+                        <a [routerLink]="['/categorias']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-bars" aria-hidden="true"></i> &nbsp; Categorias Base</span></a>
+                    </li>
+                    <li>
                     <!-- administrar usuarios -->
                         <a [routerLink]="['/users']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-user-plus" aria-hidden="true"></i> &nbsp; Administrar Usuarios</span></a>
                     </li>
+
                 </ul>
             </li>
         </div>

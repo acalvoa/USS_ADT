@@ -1,6 +1,6 @@
 import { Injectable} from '@angular/core';
 import { Config } from '../../shared/index';
-import {Http, Response, Headers} from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
 
@@ -20,11 +20,11 @@ export class RestService {
 		let body:string = "";
 		for(let key in data){
 			if(data[key] != null && data[key] != ""){
+				if(typeof data[key] == "object") data[key] = JSON.stringify(data[key]);
 				body += key+`=${data[key]}&`;
 			}
 		}
 		body = body.substring(0,(body.length-1));
-		console.log(body);
 		let header = this.createHeaders();
 		return this.http.post(Config.API+uri, body, {
 	      	headers: header,
@@ -38,6 +38,7 @@ export class RestService {
 		let body:string = "";
 		for(let key in data){
 			if(data[key] != null && data[key] != ""){
+				if(typeof data[key] == "object") data[key] = JSON.stringify(data[key]);
 				body += key+`=${data[key]}&`;
 			}
 		}
@@ -79,7 +80,22 @@ export class RestService {
 			return response;
 		});
 	}
-	put() {
-
+	public put(id:number,uri:string, data:any) {
+		let body:string = "";
+		for(let key in data){
+			if(data[key] != null && data[key] != ""){
+				if(typeof data[key] == "object") data[key] = JSON.stringify(data[key]);
+				body += key+`=${data[key]}&`;
+			}
+		}
+		body = body.substring(0,(body.length-1));
+		let header = this.createHeaders();
+		return this.http.put(Config.API+uri+"/"+id, body,{
+	      	headers: header,
+	      	withCredentials: true
+	    }).map((res:Response) => {
+			let response = res.json();
+			return response;
+		});
 	}
 }

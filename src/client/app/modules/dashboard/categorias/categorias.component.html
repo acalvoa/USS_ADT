@@ -1,0 +1,64 @@
+<!-- VISOR -->
+<div class="root" *ngIf="view=='visor'">
+  <div class="card card-outline-success">
+    <div class="card-header card-success">Administrador de Categorias Base</div> 
+    <table class="table table-striped">
+      <thead>
+        <th>#</th>
+        <th>Nombre de Categoria</th>
+        <th>Descripción</th>
+        <th>Color de la Categoria</th>
+        <th>Color del texto</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let categoria of categorias">
+          <td>{{ categoria.ID_CATEGORIA }}</td>
+          <td>{{ categoria.NOMBRE }}</td>
+          <td>{{ categoria.DESCRIPCION }}</td>
+          <td><div class="testcolor" [style.background]="categoria.COLOR"></div></td>
+          <td><div class="testcolor" [style.background]="categoria.TEXTO"></div></td>
+          <td class="actions">
+            <span (click)="goEdit(categoria)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+            <span (click)="delete(categoria)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </td>
+        </tr>
+        <tr *ngIf="categorias && categorias.length == 0"><td colspan="3">No existen categorias registradas.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="btn btn-success" (click)="view='form'">Crear Categoria base</button>
+</div>
+<!-- FORMULARIO -->
+<div class="root" *ngIf="view=='form' || view=='edit'">
+  <form (submit)="save($event)">
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Crear Categoria Base</div> 
+      <div class="card-block">
+        <div class="form-group">
+          <label for="nombre-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre de la categoria" required>
+          <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo de la categoria de tareas.</small>
+        </div>
+        <div class="form-group">
+          <label for="descripcion-txt">Descripcion</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.DESCRIPCION" name="descripcion" id="descripcion-txt" aria-describedby="descripcion-txt" placeholder="Descripcion de la categoria" required>
+          <small id="descripcion-txt" class="form-text text-muted">Descripcion de la categoria.</small>
+        </div>
+        <div class="form-group">
+          <label for="color-txt">Color</label>
+          <input type="color" class="form-control" [(ngModel)]="dataIn.COLOR" name="color" id="color-txt" aria-describedby="color-txt" placeholder="Color de la categoria" required>
+          <small id="descripcion-txt" class="form-text text-muted">Color representativa de la categoria.</small>
+        </div>
+        <div class="form-group">
+          <label for="texto-txt">Color</label>
+          <input type="color" class="form-control" [(ngModel)]="dataIn.TEXTO" name="texto" id="texto-txt" aria-describedby="texto-txt" placeholder="Color del texto" required>
+          <small id="texto-txt" class="form-text text-muted">Color usado para el texto.</small>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="view=='form'">Crear Cateogoria</button>
+    <button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar Categoria</button>
+    <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
+  </form>
+</div>

@@ -1,4 +1,5 @@
 import { Component, Input} from '@angular/core';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
 	moduleId: module.id,
@@ -10,9 +11,13 @@ import { Component, Input} from '@angular/core';
 export class SidebarComponent {
 	@Input() isActive:boolean;
 	showMenu: string = '';
+	private admin:boolean;
 	// eventCalled() {
 	// 	this.isActive = !this.isActive;
 	// }
+	constructor(user:UserService){
+		this.admin = user.isAdmin();
+	}
 	addExpandClass(element: any) {
 		if (element === this.showMenu) {
 			this.showMenu = '0';

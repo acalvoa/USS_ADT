@@ -22,7 +22,6 @@ export class DatatableComponent implements OnInit{
 	constructor(){
 	}
 	ngOnInit(){
-		console.log(this.column);
 	}
 	public doEdit(obj:any){
 		this.edit.emit(obj)

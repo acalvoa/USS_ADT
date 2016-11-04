@@ -15,7 +15,7 @@
           <tr *ngFor="let area of areas">
          <td>{{ area.ID_AREA }}</td>
          <td>{{ area.NOMBRE_AREA }}</td>
-        <td>{{ area.RESPONSABLE ? area.RESPONSABLE.NOMBRE : "No registra"}}</td>
+        <td>{{ area.RESPONSABLE && area.RESPONSABLE.NAME && area.RESPONSABLE.ID_USER != 1 ? area.RESPONSABLE.NAME+" "+area.RESPONSABLE.LASTNAME : "No registra"}}</td>
          <td>{{ area.SEDE ? area.SEDE.NOMBRE_SEDE : "No Registra"}}</td>
          <td class="actions"> 
          <span (click)="goEdit(area)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
@@ -38,33 +38,33 @@
       <div class="card-block"> 
 
           <div class="form-group">
-          <label for="nombre-txt">Nombre del area</label>
-          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE_AREA" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre del area" required>
-          <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo del area dentro de la sede.</small>
-         </div>
+            <label for="nombre-txt">Nombre del area</label>
+            <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE_AREA" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre del area" required>
+            <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo del area dentro de la sede.</small>
+          </div>
         
-                 <div class="form-group">
-          <label for="sede-select">Usuario</label>
-          <select class="form-control" id="sede-select" [(ngModel)]="dataIn.SEDE" name="sede" required>
-            <option value="">Seleccionar Sede</option>
-            <option *ngFor="let sede of sedes" [value]="sede.ID_SEDE">{{ sede.NOMBRE_SEDE }}</option>
-          </select>
-          <small id="nombre-txt" class="form-text text-muted">Nombre de la sede a la que pertenece el area.</small>
-        </div>
+          <div class="form-group" *ngIf="view=='edit'">
+            <label for="sede-select">Responsable</label>
+            <select class="form-control" id="responsable-select" [(ngModel)]="dataIn.RESPONSABLE" name="responsable" required>
+              <option value="">Seleccionar Usuario Responsable</option>
+              <option *ngFor="let user of users" [value]="user.ID_USER">{{ user.NAME }} {{ user.LASTNAME }}</option>
+            </select>
+            <small id="responsable-txt" class="form-text text-muted">Usuario Responsable del area.</small>
+          </div>
 
-         <div class="form-group">
-          <label for="sede-select">Sede</label>
-          <select class="form-control" id="sede-select" [(ngModel)]="dataIn.SEDE" name="sede" required>
-            <option value="">Seleccionar Sede</option>
-            <option *ngFor="let sede of sedes" [value]="sede.ID_SEDE">{{ sede.NOMBRE_SEDE }}</option>
-          </select>
-          <small id="nombre-txt" class="form-text text-muted">Nombre de la sede a la que pertenece el area.</small>
-        </div>
+          <div class="form-group">
+            <label for="sede-select">Sede</label>
+            <select class="form-control" id="sede-select" [(ngModel)]="dataIn.SEDE" name="sede" required>
+              <option value="">Seleccionar Sede</option>
+              <option *ngFor="let sede of sedes" [value]="sede.ID_SEDE">{{ sede.NOMBRE_SEDE }}</option>
+            </select>
+            <small id="sede-txt" class="form-text text-muted">Nombre de la sede a la que pertenece el area.</small>
+          </div>
 
        </div>
 </div>
 <button type="submit" class="btn btn-success" *ngIf="view=='form'">Crear Area</button>
-<button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar lugar</button>
+<button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar Area</button>
 <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
 </form>
 </div>

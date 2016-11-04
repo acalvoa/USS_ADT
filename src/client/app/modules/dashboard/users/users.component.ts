@@ -13,94 +13,113 @@ import { RestService } from '../../../services/index';
 export class UsersComponent {
 	private user:UserService;
 	private rest:RestService;
-	public rows:Array<any> = [];
-	public columns:any[] = [{
-		name: "Nombre",
-		match: "NAME"
-	},{
-		name: "Apellido",
-		match: "LASTNAME"
-	},{
-		name: "Email",
-		match: "EMAIL"
-	},{
-		name: "Sede",
-		match: "SEDE",
-		submatch: "NOMBRE_SEDE"
-	},{
-		name: "Area",
-		match: "AREA",
-		submatch: "NOMBRE_AREA"
-	},{
-		name: "Rol",
-		match: "ROLE",
-		submatch: "NOMBRE_ROL"
-	}];
-	public tconfig:any = {
-		items: 20,
-		paginate: true,
-		filtros: true,
-		delete: true,
-		edit: true
-	};
 	public datas:any[] = [];
 	public sedes:any[] = [];
 	public areas:any[] = [];
 	//PANTALLA
-	private action:string = "view";
 	//ELEMENTO
-	private newuser = {
-		NAME: "",
-		LASTNAME: "",
-		EMAIL: "",
-		PASSWORD: "",
-		SEDE: "",
-		ROLE:1,
-		AREA: ""
-	};
+	private dataIn:any;
+	private dataEdit:any;
+	private view:string;
 	//CONSTRUCTOR
 	constructor(user:UserService, rest:RestService){
 		this.rest = rest;
 		this.user = user;
 		this.user.isAdmin();
+		this.resetForm();
 		this.getuser();
+		this.fetch();
+		this.view = 'visor';
 	}
 	getuser(){
 		this.user.getUsers().subscribe(
 		    data => {
-		    	console.log(data);
+		    	if(data[0].EMAIL == 'root@uss.cl') data.splice(0,1);
 		    	this.datas = data;
 		    },
 		    err => console.error(err)
 		);
 	}
-	viewcreate(){
+	fetch(){
+		this.rest.get('/area').subscribe(
+		    data => {
+		    	this.areas = data;
+		    },
+		    err => console.error(err)
+		);
 		this.rest.get('/sedes').subscribe(
 		    data => {
-		    	console.log(data);
 		    	this.sedes = data.sedes;
-		    	this.action = 'create';
 		    },
 		    err => console.error(err)
 		);
 	}
 	createUser(event:any){
 		event.preventDefault();
-		this.rest.post(this.newuser, '/users').subscribe(
+		if(this.view == 'create'){
+			this.rest.post(this.dataIn, '/users').subscribe(
+			    data => {
+			    	data.SEDE = this.searchSede(data.SEDE);
+			    	data.AREA = this.searchArea(data.AREA);
+			    	this.datas.push(data);
+			    	this.view = 'visor';
+			    	this.resetForm();
+			    },
+			    err => console.error(err)
+			);
+		}
+		else{
+			this.rest.put(this.dataEdit.ID_USER, '/users', this.dataIn).subscribe(
+			    data => {
+			    	this.datas[this.datas.indexOf(this.dataEdit)] = data;
+			    	this.view = 'visor';
+			    	this.resetForm();
+			    },
+			    err => console.error(err)
+			);
+		}
+	}
+	searchSede(value:number){
+		for(let i=0; i<this.sedes.length; i++){
+			if(this.sedes[i].ID_SEDE == value) return this.sedes[i];
+		}
+		return null;
+	}
+	searchArea(value:number){
+		for(let i=0; i<this.areas.length; i++){
+			if(this.areas[i].ID_AREA == value) return this.areas[i];
+		}
+		return null;
+	}
+	goEdit(obj:any){
+		this.dataEdit = obj;
+		this.dataIn = JSON.parse(JSON.stringify(obj));
+		this.dataIn.SEDE =  this.dataIn.SEDE.ID_SEDE;
+		this.dataIn.AREA =  this.dataIn.AREA.ID_AREA;
+		this.dataIn.ROLE =  this.dataIn.ROLE.ID_ROLE;
+		delete this.dataIn.ID_USER;
+		delete this.dataIn.PASSWORD;
+		delete this.dataIn.createdAt;
+		delete this.dataIn.updatedAt;
+		this.view = 'edit';
+	}
+	delete(obj:any){
+		this.rest.delete(obj.ID_USER, '/users').subscribe(
 		    data => {
-		    	this.datas.push(data);
-		    	this.action = 'view';
-		    	this.newuser = {
-					NAME: "",
-					LASTNAME: "",
-					EMAIL: "",
-					PASSWORD: "",
-					SEDE: "",
-					ROLE:1,
-					AREA: ""
-				};
+		    	this.datas.splice(this.datas.indexOf(obj),1);
 		    },
 		    err => console.error(err)
 		);
+	}
+	resetForm(){
+		this.dataIn = {
+			NAME: "",
+			LASTNAME: "",
+			EMAIL: "",
+			PASSWORD: "",
+			SEDE: "",
+			ROLE:1,
+			AREA: ""
+		};
 	}
 }

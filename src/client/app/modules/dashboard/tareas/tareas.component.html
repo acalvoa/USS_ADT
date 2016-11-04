@@ -1,0 +1,53 @@
+<!-- VISOR -->
+<div class="root" *ngIf="view=='visor'">
+  <div class="card card-outline-success">
+    <div class="card-header card-success">Administrador de tareas</div> 
+    <table class="table table-striped">
+      <thead>
+        <th>#</th>
+        <th>Nombre de Lugar</th>
+        <th>Sede</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lugar of tareas">
+          <td>{{ lugar.ID_LUGAR }}</td>
+          <td>{{ lugar.NOMBRE_LUGAR }}</td>
+          <td>{{ lugar.SEDE ? lugar.SEDE.NOMBRE_SEDE : "No Registra" }}</td>
+          <td class="actions">
+            <span (click)="goEdit(lugar)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+            <span (click)="delete(lugar)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </td>
+        </tr>
+        <tr *ngIf="tareas && tareas.length == 0"><td colspan="3">No existen tareas registrados.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="btn btn-success" (click)="view='form'">Crear Lugar</button>
+</div>
+<!-- FORMULARIO -->
+<div class="root" *ngIf="view=='form' || view=='edit'">
+  <form (submit)="save($event)">
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Crear Lugar</div> 
+      <div class="card-block">
+        <div class="form-group">
+          <label for="nombre-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE_LUGAR" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre del lugar" required>
+          <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo del lugar dentro de la sede.</small>
+        </div>
+        <div class="form-group">
+          <label for="sede-select">Sede</label>
+          <select class="form-control" id="sede-select" [(ngModel)]="dataIn.SEDE" name="sede" required>
+            <option value="">Seleccionar Sede</option>
+            <option *ngFor="let sede of sedes" [value]="sede.ID_SEDE">{{ sede.NOMBRE_SEDE }}</option>
+          </select>
+          <small id="nombre-txt" class="form-text text-muted">Nombre de la sede a la que pertenece el lugar.</small>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="view=='form'">Crear Lugar</button>
+    <button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar Lugar</button>
+    <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
+  </form>
+</div>

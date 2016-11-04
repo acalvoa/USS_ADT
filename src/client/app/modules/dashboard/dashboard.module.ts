@@ -22,6 +22,8 @@ import {UsersModule} from './users/users.module';
 import {SedesModule} from './sedes/sedes.module';
 import {AreasModule} from './areas/areas.module';
 import {LugaresModule} from './lugares/lugares.module';
+import {TareasModule} from './tareas/tareas.module';
+import {CategoriasModule} from './categorias/categorias.module';
 
 
 @NgModule({
@@ -35,14 +37,9 @@ import {LugaresModule} from './lugares/lugares.module';
         SedesModule,
         AreasModule,
         LugaresModule,
-        DatatableModule
-     //    ChartModule,
-     //    TableModule,
-     //    FormModule,
-     //    GridModule,
-    	// BSComponentModule,
-     //    BSElementModule,
-     //    BlankPageModule
+        DatatableModule,
+        TareasModule,
+        CategoriasModule
     ],
     declarations: [DashboardComponent, NavbarComponent, SidebarComponent],
     exports: [DashboardComponent, NavbarComponent, SidebarComponent]
