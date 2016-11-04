@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RestService } from '../../../services/index';
-import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 @Component({
 	moduleId: module.id,
@@ -17,13 +16,13 @@ export class CategoriasComponent {
 	private dataEdit:any;
 	private dataIn:any;
 	//CONSTRUCTOR
-	constructor(rest:RestService){
+	constructor(rest:RestService) {
 		this.view = 'visor';
-		this.rest = rest;	
+		this.rest = rest;
 		this.fetch();
 		this.resetForm();
 	}
-	fetch(){
+	fetch() {
 		this.rest.get('/categoria').subscribe(
 		    data => {
 		    	this.categorias = data;
@@ -31,9 +30,9 @@ export class CategoriasComponent {
 		    err => console.error(err)
 		);
 	}
-	save(event:any){
+	save(event:any) {
 		event.preventDefault();
-		if(this.view == 'form'){
+		if(this.view === 'form') {
 			this.rest.post(this.dataIn, '/categoria').subscribe(
 			    data => {
 			    	this.categorias.push(data);
@@ -43,7 +42,7 @@ export class CategoriasComponent {
 			    err => console.error(err)
 			);
 		}
-		else if(this.view == 'edit'){
+		if(this.view === 'edit') {
 			this.rest.put(this.dataEdit.ID_CATEGORIA, '/categoria', this.dataIn).subscribe(
 			    data => {
 			    	this.categorias[this.categorias.indexOf(this.dataEdit)] = data;
@@ -54,14 +53,14 @@ export class CategoriasComponent {
 			);
 		}
 	}
-	goEdit(obj:any){
+	goEdit(obj:any) {
 		this.dataEdit = obj;
 		this.dataIn.NOMBRE = obj.NOMBRE;
 		this.dataIn.DESCRIPCION = obj.DESCRIPCION;
 		this.dataIn.COLOR = obj.COLOR;
 		this.view = 'edit';
 	}
-	delete(obj:any){
+	delete(obj:any) {
 		this.rest.delete(obj.ID_CATEGORIA, '/categoria').subscribe(
 		    data => {
 		    	this.categorias.splice(this.categorias.indexOf(obj),1);
@@ -69,7 +68,7 @@ export class CategoriasComponent {
 		    err => console.error(err)
 		);
 	}
-	resetForm(){
+	resetForm() {
 		this.dataIn = {
 			NOMBRE: '',
 			DESCRIPCION: '',

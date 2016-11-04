@@ -9,7 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 */
 
 @NgModule({
-    imports: [CommonModule, 
+    imports: [CommonModule,
     	RouterModule, NgbModule.forRoot()],
     declarations: [],
     exports: [CommonModule, FormsModule, RouterModule]

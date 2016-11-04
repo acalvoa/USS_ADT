@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RestService } from '../../../services/index';
-import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 @Component({
 	moduleId: module.id,
@@ -19,7 +18,7 @@ export class AreasComponent {
 	private dataIn:any;
 	private sedes:any[];
 	//CONSTRUCTOR
-	constructor(rest:RestService){
+	constructor(rest:RestService) {
 		this.rest = rest;
 		this.view = 'visor';
 		this.fetch();
@@ -27,7 +26,7 @@ export class AreasComponent {
 		this.fetchSedes();
 	}
 	//TRAE DATA
-	fetch(){
+	fetch() {
 		this.rest.get('/area').subscribe(
 			data => {
 				this.areas = data;
@@ -36,20 +35,20 @@ export class AreasComponent {
 		);
 	}
 
-	fetchSedes(){
+	fetchSedes() {
 		this.rest.get('/sedes').subscribe(
 			data => {
-				if(data.response == 200){
-					this.sedes = data.sedes; 
+				if(data.response === 200) {
+					this.sedes = data.sedes;
 				}
 			},
 			err => console.error(err)
 		);
 	}
 
-	save(event:any){
+	save(event:any) {
 		event.preventDefault();
-		if(this.view == 'form'){
+		if(this.view === 'form') {
 			this.rest.post(this.dataIn,'/area').subscribe(
 				data => {
 					data.SEDE = this.searchSede(data.SEDE);
@@ -60,7 +59,7 @@ export class AreasComponent {
 				err => console.error(err)
 			);
 		}
-		else if(this.view == 'edit'){
+		if(this.view === 'edit') {
 			this.rest.put(this.dataEdit.ID_AREA,'/area',this.dataIn).subscribe(
 				data => {
 					this.areas[this.areas.indexOf(this.dataEdit)] = data;
@@ -70,23 +69,21 @@ export class AreasComponent {
 				err => console.error(err)
 			);
 		}
-		
 	}
-	searchSede(value:number){
-		for(let i=0; i<this.sedes.length; i++)
-			{ if(this.sedes[i].ID_SEDE == value)
-				return this.sedes[i];
-			}
+	searchSede(value:number) {
+		for(let i=0; i<this.sedes.length; i++) {
+		 	if(this.sedes[i].ID_SEDE === value) return this.sedes[i];
+		}
 		return null;
 	}
-	goEdit(obj:any){
+	goEdit(obj:any) {
 		this.rest.get('/users?AREA='+obj.ID_AREA).subscribe(
 			data => {
 				this.users = data;
 				this.dataEdit = obj;
 				this.dataIn.NOMBRE_AREA = obj.NOMBRE_AREA;
 				this.dataIn.SEDE = obj.SEDE.ID_SEDE;
-				this.dataIn.RESPONSABLE = obj.RESPONSABLE.ID_USER != 1 ? obj.RESPONSABLE.ID_USER : '';
+				this.dataIn.RESPONSABLE = obj.RESPONSABLE.ID_USER !== 1 ? obj.RESPONSABLE.ID_USER : '';
 				this.view = 'edit';
 				this.resetForm();
 			},
@@ -94,7 +91,7 @@ export class AreasComponent {
 		);
 	}
 
-	delete(obj:any){
+	delete(obj:any) {
 
 		this.rest.delete(obj.ID_AREA, '/area').subscribe(
 			data => {
@@ -104,7 +101,7 @@ export class AreasComponent {
 		);
 
 	}
-	resetForm(){
+	resetForm() {
 		this.dataIn = {
 			NOMBRE_AREA: '',
 			SEDE: '',

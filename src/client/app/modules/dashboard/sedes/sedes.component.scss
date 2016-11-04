@@ -1,16 +1,17 @@
-.user-root{
+.root{
 	width:100%;
 }
 :host {
 	width:100%;
 }
-.card-uss{
-	background: #1cc09f !important;
-	color: #FFF;
+.card-outline-success{
+	border-color:#5CB85C;
 }
-.card-outline-primary{
-	// border: 1px #0275d8 solid;
+.card-header{
+	color:#FFF;
 }
-.new-user-body{
-	padding:10px;
+.actions{
+	span{
+		cursor:pointer;
+	}
 }

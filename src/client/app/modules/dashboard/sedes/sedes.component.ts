@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '../../../services/index';
 import { RestService } from '../../../services/index';
-import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 @Component({
 	moduleId: module.id,
@@ -12,74 +10,67 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
 })
 
 export class SedesComponent {
-	private user:UserService;
 	private rest:RestService;
-	public rows:Array<any> = [];
-	public columns:any[] = [{
-		name: "Nombre de Sede",
-		match: "NOMBRE_SEDE"
-	},{
-		name: "Dirección de Sede",
-		match: "DIRECCION"
-	},{
-		name: "Numero de Lugares",
-		match: "LUGARES"
-	},{
-		name: "Numeros de Areas",
-		match: "AREAS"
-	}];
-	public tconfig:any = {
-		items: 20,
-		paginate: true,
-		filtros: true,
-		delete: true,
-		edit: true
-	};
-	public datas:any[] = [];
-	//PANTALLA
-	private action:string = "view";
-	//OBJETO DE INGRESO
-	private inSede:any = {
-		NOMBRE_SEDE: "",
-		DIRECCION: ""
-	}
+	private view:string;
+	private sedes:any[];
+	private dataEdit:any;
+	private dataIn:any;
 	//CONSTRUCTOR
-	constructor(user:UserService, rest:RestService){
-		this.user = user;
+	constructor(rest:RestService) {
+		this.view = 'visor';
 		this.rest = rest;
-		this.user.isAdmin();
-		this.getSede();
+		this.fetch();
+		this.resetForm();
 	}
-	getSede(){
+	fetch() {
 		this.rest.get('/sedes').subscribe(
 		    data => {
-		    	this.datas = data.sedes;
+		    	this.sedes = data.sedes;
 		    },
 		    err => console.error(err)
 		);
 	}
-	crearSede(event:any){
+	save(event:any) {
 		event.preventDefault();
-		this.rest.post(this.inSede, '/sedes').subscribe(
-		    data => {
-		    	this.datas.push(data);
-		    	this.action = 'view';
-		    	this.inSede = {
-					NOMBRE_SEDE: "",
-					DIRECCION: ""
-				};
-		    },
-		    err => console.error(err)
-		);
+		if(this.view === 'form') {
+			this.rest.post(this.dataIn, '/sedes').subscribe(
+			    data => {
+			    	this.sedes.push(data);
+			    	this.view = 'visor';
+			    	this.resetForm();
+			    },
+			    err => console.error(err)
+			);
+		}
+		if(this.view === 'edit') {
+			this.rest.put(this.dataEdit.ID_SEDE, '/sedes', this.dataIn).subscribe(
+			    data => {
+			    	this.sedes[this.sedes.indexOf(this.dataEdit)] = data;
+			    	this.view = 'visor';
+			    	this.resetForm();
+			    },
+			    err => console.error(err)
+			);
+		}
 	}
-	borrarSede(obj:any){
+	goEdit(obj:any) {
+		this.dataEdit = obj;
+		this.dataIn.NOMBRE_SEDE = obj.NOMBRE_SEDE;
+		this.dataIn.DIRECCION = obj.DIRECCION;
+		this.view = 'edit';
+	}
+	delete(obj:any) {
 		this.rest.delete(obj.ID_SEDE, '/sedes').subscribe(
 		    data => {
-		    	this.datas.splice(this.datas.indexOf(obj), 1);
+		    	this.sedes.splice(this.sedes.indexOf(obj),1);
 		    },
 		    err => console.error(err)
 		);
 	}
-	editSede(obj:any){
+	resetForm() {
+		this.dataIn = {
+			NOMBRE_SEDE: '',
+			DIRECCION: ''
+		};
 	}
 }

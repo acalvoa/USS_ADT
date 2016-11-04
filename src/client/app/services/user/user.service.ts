@@ -82,14 +82,14 @@ export class UserService {
 			return null;
 		}
 	}
-	isAdmin(){
+	isAdmin() {
 		if(this.user.ROLE.SUPERUSER) {
 			return this.user;
 		} else {
 			return null;
 		}
 	}
-	getUsers(){
+	getUsers() {
 		let header = this.createHeaders();
 		return this.http.get(Config.API+'/users',{
 	      headers: header,

@@ -15,7 +15,7 @@ export class SidebarComponent {
 	// eventCalled() {
 	// 	this.isActive = !this.isActive;
 	// }
-	constructor(user:UserService){
+	constructor(user:UserService) {
 		this.admin = user.isAdmin();
 	}
 	addExpandClass(element: any) {

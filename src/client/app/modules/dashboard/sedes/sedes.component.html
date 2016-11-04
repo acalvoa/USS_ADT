@@ -1,46 +1,54 @@
-<!-- SECCIÓN DE VISOR DE USUARIO -->
-<div class="user-root" *ngIf="action === 'view'">
-  <div class="card card-outline-primary" >
-    <div class="card-header card-uss">Listado de Sedes</div>
-      <datatable-cmp [config]="tconfig" [column]="columns" [data]="datas" (delete)="borrarSede($event)" (edit)="editSede($event)"></datatable-cmp>
+<!-- VISOR -->
+<div class="root" *ngIf="view=='visor'">
+  <div class="card card-outline-primary">
+    <div class="card-header card-primary">Administrador de Sedes</div> 
+    <table class="table table-striped">
+      <thead>
+        <th>#</th>
+        <th>Nombre de la Sede</th>
+        <th>Direccion</th>
+        <th>Areas</th>
+        <th>Lugares</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sede of sedes">
+          <td>{{ sede.ID_SEDE }}</td>
+          <td>{{ sede.NOMBRE_SEDE }}</td>
+          <td>{{ sede.DIRECCION  }}</td>
+          <td>{{ sede.AREAS  }}</td>
+          <td>{{ sede.LUGARES  }}</td>
+          <td class="actions">
+            <span (click)="goEdit(sede)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+            <span (click)="delete(sede)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </td>
+        </tr>
+        <tr *ngIf="sedes && sedes.length == 0"><td colspan="3">No existen sedes registradas.</td></tr>
+      </tbody>
+    </table>
   </div>
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-success" (click)="action='create'"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
-      </div>
-    </div>
-  </div>
+  <button type="button" class="btn btn-success" (click)="view='form'">Crear Sede</button>
 </div>
-<!-- SECCIÓN DE CREACION DE USUARIO -->
-<form (submit)="crearSede($event)">
-<div class="user-root" *ngIf="action === 'create'">
-  <div class="card card-outline-primary" >
-    <div class="card-header card-uss">Crear Nueva Sede</div>
-    <div class="card-body new-user-body">
-      
+<!-- FORMULARIO -->
+<div class="root" *ngIf="view=='form' || view=='edit'">
+  <form (submit)="save($event)">
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Crear Lugar</div> 
+      <div class="card-block">
         <div class="form-group">
-          <label for="exampleInputEmail1">Nombre de la sede</label>
-          <input type="text" [(ngModel)]="inSede.NOMBRE_SEDE" name="NOMBRE_SEDE" class="form-control" placeholder="Nombre de sede" required>
-          <small id="emailHelp" class="form-text text-muted">Representa el nombre de la sede.</small>
+          <label for="nombre-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE_SEDE" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre de la sede" required>
+          <small id="nombre-txt" class="form-text text-muted">Nombre de la sede fisica..</small>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Dirección de la sede</label>
-          <input type="text" [(ngModel)]="inSede.DIRECCION" name="DIRECCION" class="form-control" placeholder="Direccion de sede" required>
-          <small id="emailHelp" class="form-text text-muted">Calle y ubicación de la sede.</small>
+          <label for="direccion-txt">Dirección</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.DIRECCION" name="direccion" id="direccion-txt" aria-describedby="direccion-txt" placeholder="Dirección de la sede" required>
+          <small id="direccion-txt" class="form-text text-muted">Dirección donde se ubica la sede.</small>
         </div>
-      
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <div class="btn-group" role="group" aria-label="...">
-          <button type="submit" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Crear</button>
-      </div>
-      <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-warning" (click)="action='view'"><i class="fa fa-chevron-left" aria-hidden="true"></i> Volver</button>
       </div>
     </div>
-  </div>
+    <button type="submit" class="btn btn-success" *ngIf="view=='form'">Crear Sede</button>
+    <button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar Sede</button>
+    <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
+  </form>
 </div>
-</form>

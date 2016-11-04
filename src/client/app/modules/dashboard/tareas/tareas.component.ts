@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RestService } from '../../../services/index';
-import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 @Component({
 	moduleId: module.id,
@@ -18,14 +17,14 @@ export class TareasComponent {
 	private dataEdit:any;
 	private dataIn:any;
 	//CONSTRUCTOR
-	constructor(rest:RestService){
+	constructor(rest:RestService) {
 		this.view = 'visor';
-		this.rest = rest;	
+		this.rest = rest;
 		this.fetch();
 		this.fetchSedes();
 		this.resetForm();
 	}
-	fetch(){
+	fetch() {
 		this.rest.get('/tareas').subscribe(
 		    data => {
 		    	this.tareas = data;
@@ -33,19 +32,19 @@ export class TareasComponent {
 		    err => console.error(err)
 		);
 	}
-	fetchSedes(){
+	fetchSedes() {
 		this.rest.get('/sedes').subscribe(
 		    data => {
-		    	if(data.response == 200){
+		    	if(data.response === 200) {
 		    		this.sedes = data.sedes;
 		    	}
 		    },
 		    err => console.error(err)
 		);
 	}
-	save(event:any){
+	save(event:any) {
 		event.preventDefault();
-		if(this.view == 'form'){
+		if(this.view === 'form') {
 			this.rest.post(this.dataIn, '/lugar').subscribe(
 			    data => {
 			    	data.SEDE = this.searchSede(data.SEDE);
@@ -56,7 +55,7 @@ export class TareasComponent {
 			    err => console.error(err)
 			);
 		}
-		else if(this.view == 'edit'){
+		if(this.view === 'edit') {
 			this.rest.put(this.dataEdit.ID_LUGAR, '/lugar', this.dataIn).subscribe(
 			    data => {
 			    	this.tareas[this.tareas.indexOf(this.dataEdit)] = data;
@@ -67,19 +66,19 @@ export class TareasComponent {
 			);
 		}
 	}
-	searchSede(value:number){
-		for(let i=0; i<this.sedes.length; i++){
-			if(this.sedes[i].ID_SEDE == value) return this.sedes[i];
+	searchSede(value:number) {
+		for(let i=0; i<this.sedes.length; i++) {
+			if(this.sedes[i].ID_SEDE === value) return this.sedes[i];
 		}
 		return null;
 	}
-	goEdit(obj:any){
+	goEdit(obj:any) {
 		this.dataEdit = obj;
 		this.dataIn.NOMBRE_LUGAR = obj.NOMBRE_LUGAR;
 		this.dataIn.SEDE = obj.SEDE.ID_SEDE;
 		this.view = 'edit';
 	}
-	delete(obj:any){
+	delete(obj:any) {
 		this.rest.delete(obj.ID_LUGAR, '/lugar').subscribe(
 		    data => {
 		    	this.tareas.splice(this.tareas.indexOf(obj),1);
@@ -87,7 +86,7 @@ export class TareasComponent {
 		    err => console.error(err)
 		);
 	}
-	resetForm(){
+	resetForm() {
 		this.dataIn = {
 			NOMBRE_LUGAR: '',
 			SEDE: ''

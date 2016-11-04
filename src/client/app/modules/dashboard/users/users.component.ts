@@ -13,16 +13,16 @@ import { RestService } from '../../../services/index';
 export class UsersComponent {
 	private user:UserService;
 	private rest:RestService;
-	public datas:any[] = [];
-	public sedes:any[] = [];
-	public areas:any[] = [];
+	private datas:any[] = [];
+	private sedes:any[] = [];
+	private areas:any[] = [];
 	//PANTALLA
 	//ELEMENTO
 	private dataIn:any;
 	private dataEdit:any;
 	private view:string;
 	//CONSTRUCTOR
-	constructor(user:UserService, rest:RestService){
+	constructor(user:UserService, rest:RestService) {
 		this.rest = rest;
 		this.user = user;
 		this.user.isAdmin();
@@ -31,16 +31,16 @@ export class UsersComponent {
 		this.fetch();
 		this.view = 'visor';
 	}
-	getuser(){
+	getuser() {
 		this.user.getUsers().subscribe(
 		    data => {
-		    	if(data[0].EMAIL == 'root@uss.cl') data.splice(0,1);
+		    	if(data[0].EMAIL === 'root@uss.cl') data.splice(0,1);
 		    	this.datas = data;
 		    },
 		    err => console.error(err)
 		);
 	}
-	fetch(){
+	fetch() {
 		this.rest.get('/area').subscribe(
 		    data => {
 		    	this.areas = data;
@@ -54,9 +54,9 @@ export class UsersComponent {
 		    err => console.error(err)
 		);
 	}
-	createUser(event:any){
+	createUser(event:any) {
 		event.preventDefault();
-		if(this.view == 'create'){
+		if(this.view === 'create') {
 			this.rest.post(this.dataIn, '/users').subscribe(
 			    data => {
 			    	data.SEDE = this.searchSede(data.SEDE);
@@ -67,8 +67,7 @@ export class UsersComponent {
 			    },
 			    err => console.error(err)
 			);
-		}
-		else{
+		} else {
 			this.rest.put(this.dataEdit.ID_USER, '/users', this.dataIn).subscribe(
 			    data => {
 			    	this.datas[this.datas.indexOf(this.dataEdit)] = data;
@@ -79,19 +78,19 @@ export class UsersComponent {
 			);
 		}
 	}
-	searchSede(value:number){
-		for(let i=0; i<this.sedes.length; i++){
-			if(this.sedes[i].ID_SEDE == value) return this.sedes[i];
+	searchSede(value:number) {
+		for(let i=0; i<this.sedes.length; i++) {
+			if(this.sedes[i].ID_SEDE === value) return this.sedes[i];
 		}
 		return null;
 	}
-	searchArea(value:number){
-		for(let i=0; i<this.areas.length; i++){
-			if(this.areas[i].ID_AREA == value) return this.areas[i];
+	searchArea(value:number) {
+		for(let i=0; i<this.areas.length; i++) {
+			if(this.areas[i].ID_AREA === value) return this.areas[i];
 		}
 		return null;
 	}
-	goEdit(obj:any){
+	goEdit(obj:any) {
 		this.dataEdit = obj;
 		this.dataIn = JSON.parse(JSON.stringify(obj));
 		this.dataIn.SEDE =  this.dataIn.SEDE.ID_SEDE;
@@ -103,7 +102,7 @@ export class UsersComponent {
 		delete this.dataIn.updatedAt;
 		this.view = 'edit';
 	}
-	delete(obj:any){
+	delete(obj:any) {
 		this.rest.delete(obj.ID_USER, '/users').subscribe(
 		    data => {
 		    	this.datas.splice(this.datas.indexOf(obj),1);
@@ -111,15 +110,15 @@ export class UsersComponent {
 		    err => console.error(err)
 		);
 	}
-	resetForm(){
+	resetForm() {
 		this.dataIn = {
-			NAME: "",
-			LASTNAME: "",
-			EMAIL: "",
-			PASSWORD: "",
-			SEDE: "",
+			NAME: '',
+			LASTNAME: '',
+			EMAIL: '',
+			PASSWORD: '',
+			SEDE: '',
 			ROLE:1,
-			AREA: ""
+			AREA: ''
 		};
 	}
 }

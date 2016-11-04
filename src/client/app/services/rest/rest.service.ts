@@ -11,16 +11,11 @@ export class RestService {
 	constructor(http: Http, private router: Router) {
 		this.http = http;
 	}
-	private createHeaders() {
-		var headers = new Headers();
-	    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-		return headers;
-	}
 	public post(data:any, uri:string) {
-		let body:string = "";
-		for(let key in data){
-			if(data[key] != null && data[key] != ""){
-				if(typeof data[key] == "object") data[key] = JSON.stringify(data[key]);
+		let body:string = '';
+		for(let key in data) {
+			if(data[key] !== null && data[key] !== '') {
+				if(typeof data[key] === 'object') data[key] = JSON.stringify(data[key]);
 				body += key+`=${data[key]}&`;
 			}
 		}
@@ -35,10 +30,10 @@ export class RestService {
 		});
 	}
 	public postMap(data:any, uri:string) {
-		let body:string = "";
-		for(let key in data){
-			if(data[key] != null && data[key] != ""){
-				if(typeof data[key] == "object") data[key] = JSON.stringify(data[key]);
+		let body:string = '';
+		for(let key in data) {
+			if(data[key] !== null && data[key] !== '') {
+				if(typeof data[key] === 'object') data[key] = JSON.stringify(data[key]);
 				body += key+`=${data[key]}&`;
 			}
 		}
@@ -72,7 +67,7 @@ export class RestService {
 	}
 	public delete(id:number,uri:string) {
 		let header = this.createHeaders();
-		return this.http.delete(Config.API+uri+"/"+id, {
+		return this.http.delete(Config.API+uri+'/'+id, {
 	      	headers: header,
 	      	withCredentials: true
 	    }).map((res:Response) => {
@@ -81,21 +76,26 @@ export class RestService {
 		});
 	}
 	public put(id:number,uri:string, data:any) {
-		let body:string = "";
-		for(let key in data){
-			if(data[key] != null && data[key] != ""){
-				if(typeof data[key] == "object") data[key] = JSON.stringify(data[key]);
+		let body:string = '';
+		for(let key in data) {
+			if(data[key] !== null && data[key] !== '') {
+				if(typeof data[key] === 'object') data[key] = JSON.stringify(data[key]);
 				body += key+`=${data[key]}&`;
 			}
 		}
 		body = body.substring(0,(body.length-1));
 		let header = this.createHeaders();
-		return this.http.put(Config.API+uri+"/"+id, body,{
+		return this.http.put(Config.API+uri+'/'+id, body,{
 	      	headers: header,
 	      	withCredentials: true
 	    }).map((res:Response) => {
 			let response = res.json();
 			return response;
 		});
+	}
+	private createHeaders() {
+		var headers = new Headers();
+	    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+		return headers;
 	}
 }
