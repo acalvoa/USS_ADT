@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DropdownModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ModalModule } from 'ng2-bootstrap/ng2-bootstrap';
-import { HomeModule } from './examples/home/home.module';
+import { HomeModule } from './home/home.module';
 import { DatatableModule } from '../../shared/index';
 
 // import { ChartModule } from './examples/charts/chart.module';

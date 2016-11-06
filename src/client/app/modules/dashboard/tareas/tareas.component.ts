@@ -14,8 +14,11 @@ export class TareasComponent {
 	private view:string;
 	private tareas:any[];
 	private sedes:any[];
+	private categorias:any[];
+	private unidades:any[];
 	private dataEdit:any;
 	private dataIn:any;
+	private activityIn:Actividad;
 	//CONSTRUCTOR
 	constructor(rest:RestService) {
 		this.view = 'visor';
@@ -28,6 +31,18 @@ export class TareasComponent {
 		this.rest.get('/tareas').subscribe(
 		    data => {
 		    	this.tareas = data;
+		    },
+		    err => console.error(err)
+		);
+		this.rest.get('/categoria').subscribe(
+		    data => {
+		    	this.categorias = data;
+		    },
+		    err => console.error(err)
+		);
+		this.rest.get('/unidad/getbyuser').subscribe(
+		    data => {
+		    	this.unidades = data;
 		    },
 		    err => console.error(err)
 		);
@@ -86,10 +101,42 @@ export class TareasComponent {
 		    err => console.error(err)
 		);
 	}
+	addCategory(value:number){
+		for(let i=0;i<this.categorias.length;i++){
+			if(this.categorias[i].ID_CATEGORIA == value){
+				if(this.dataIn.CATEGORIA.indexOf(this.categorias[i]) == -1){
+					this.dataIn.CATEGORIA.push(this.categorias[i]);	
+				}
+				break;
+			}
+		}
+	}
 	resetForm() {
 		this.dataIn = {
-			NOMBRE_LUGAR: '',
-			SEDE: ''
+			NOMBRE: '',
+			DESCRIPCION: '',
+			CATEGORIA: [],
+			UNIDAD: '',
+			ACTIVIDADES: []
 		};
+	}
+	goActivity() {
+		this.activityIn = new Actividad();
+		this.view = 'create_activity';
+	}
+}
+class Task {
+	nombre:string;
+	lugar:number;
+	descripcion:string;
+}
+class Actividad {
+	nombre:string;
+	descripcion:string;
+	task:Task[];
+	constructor(){
+		this.nombre = '';
+		this.descripcion = '';
+		this.task = [];
 	}
 }

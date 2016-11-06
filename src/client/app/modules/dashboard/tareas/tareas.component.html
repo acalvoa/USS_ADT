@@ -4,50 +4,137 @@
     <div class="card-header card-success">Administrador de tareas</div> 
     <table class="table table-striped">
       <thead>
-        <th>#</th>
-        <th>Nombre de Lugar</th>
-        <th>Sede</th>
+        <th>Nombre de Tarea</th>
+        <th>Descripción</th>
+        <th>Unidad</th>
+        <th>Categorias</th>
+        <th>Actividades</th>
         <th></th>
       </thead>
       <tbody>
         <tr *ngFor="let lugar of tareas">
-          <td>{{ lugar.ID_LUGAR }}</td>
-          <td>{{ lugar.NOMBRE_LUGAR }}</td>
-          <td>{{ lugar.SEDE ? lugar.SEDE.NOMBRE_SEDE : "No Registra" }}</td>
+          <td>{{ lugar.ID_TAREA }}</td>
+          <td>{{ lugar.NOMBRE }}</td>
+          <td>{{ lugar.DESCRIPCION }}</td>
+          <td>{{ lugar.UNIDAD.NOMBRE }}</td>
+          <td></td>
           <td class="actions">
+            <span (click)="detail(lugar)"><i class="fa fa-question" aria-hidden="true"></i></span>
+            <span (click)="follow(lugar)"><i class="fa fa-search" aria-hidden="true"></i></span>
             <span (click)="goEdit(lugar)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
             <span (click)="delete(lugar)"><i class="fa fa-trash" aria-hidden="true"></i></span>
           </td>
         </tr>
-        <tr *ngIf="tareas && tareas.length == 0"><td colspan="3">No existen tareas registrados.</td></tr>
+        <tr *ngIf="tareas && tareas.length == 0"><td colspan="6">No existen tareas registradas.</td></tr>
       </tbody>
     </table>
   </div>
-  <button type="button" class="btn btn-success" (click)="view='form'">Crear Lugar</button>
+  <button type="button" class="btn btn-success" (click)="view='form'">Crear Tarea</button>
 </div>
 <!-- FORMULARIO -->
 <div class="root" *ngIf="view=='form' || view=='edit'">
   <form (submit)="save($event)">
     <div class="card card-outline-success">
-      <div class="card-header card-success">Crear Lugar</div> 
+      <div class="card-header card-success">Crear Tarea</div> 
       <div class="card-block">
         <div class="form-group">
           <label for="nombre-txt">Nombre</label>
-          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE_LUGAR" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre del lugar" required>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre del lugar" required>
           <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo del lugar dentro de la sede.</small>
         </div>
         <div class="form-group">
-          <label for="sede-select">Sede</label>
-          <select class="form-control" id="sede-select" [(ngModel)]="dataIn.SEDE" name="sede" required>
-            <option value="">Seleccionar Sede</option>
-            <option *ngFor="let sede of sedes" [value]="sede.ID_SEDE">{{ sede.NOMBRE_SEDE }}</option>
-          </select>
-          <small id="nombre-txt" class="form-text text-muted">Nombre de la sede a la que pertenece el lugar.</small>
+          <label for="descripcion-txt">Descripcion</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.DESCRIPCION" name="descripcion" id="descripcion-txt" aria-describedby="descripcion-txt" placeholder="Descripción de la tarea" required> 
+          <small id="descripcion-txt" class="form-text text-muted">Descripción general de la tarea.</small>
         </div>
+        <div class="form-group categoria">
+          <label for="sede-select">Categorias</label>
+          <div class="controls">
+            <select class="form-control" id="categoria-select"  #categoria name="categorias" >
+              <option value="">Seleccionar Categoria</option>
+              <option *ngFor="let categoria of categorias" [value]="categoria.ID_CATEGORIA">{{ categoria.NOMBRE }}</option>
+            </select>
+            <button type="button" class="btn btn-success" (click)="addCategory(categoria.value)"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar</button>
+          </div>
+          <small id="nombre-txt" class="form-text text-muted">Categorias con que esta etiquetada la tarea.</small>
+          <div class="labels" *ngIf="dataIn.CATEGORIA.length > 0"><div class="labelt" *ngFor="let categoria of dataIn.CATEGORIA" [style.background]="categoria.COLOR" [style.color]="categoria.TEXTO">{{ categoria.NOMBRE }}</div></div>
+        </div>
+        <div class="form-group">
+          <label for="sede-select">Unidad</label>
+          <div class="controls">
+            <select class="form-control" id="unidad-select"  [(ngModel)]="dataIn.UNIDAD" #unidad name="unidad" >
+              <option value="">Seleccionar Unidad</option>
+              <option *ngFor="let unidad of unidades" [value]="unidad.ID_UNIDAD">{{ unidad.AREA.NOMBRE_AREA }} - Unidad {{ unidad.NOMBRE }}</option>
+            </select>
+          </div>
+          <small id="nombre-txt" class="form-text text-muted">Unidad a la que esta asignada la tarea.</small>
+        </div>
+        <div class="form-group">
+          <label for="sede-select">Actividades</label>
+        </div>
+        <small id="nombre-txt" class="form-text text-muted">Actividades asociadas a la tarea.</small>
+        <table class="table table-striped">
+          <thead>
+            <th>Actividad</th>
+            <th>Descripción</th>
+            <th>Cantidad de tareas</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let actividad of dataIn.ACTIVIDADES">
+              <td>{{ actividad.NOMBRE }}</td>
+              <td>{{ actividad.DESCRIPCION }}</td>
+              <td>{{ actividad.TASKLIST.length }}</td>
+              <td>
+                <span (click)="goEditAct(lugar)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                <span (click)="deleteAct(lugar)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" (click)="goActivity()"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar Actividad</button>
       </div>
     </div>
     <button type="submit" class="btn btn-success" *ngIf="view=='form'">Crear Lugar</button>
     <button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar Lugar</button>
     <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
   </form>
+</div>
+<div class="root" *ngIf="view=='create_activity'">
+  <form (submit)="saveActivity($event)">
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Crear Actividad</div> 
+      <div class="card-block">
+        <div class="form-group">
+          <label for="nombre-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="activityIn.nombre" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre de la actividad" required>
+          <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo de la actividad a realizar.</small>
+        </div>
+        <div class="form-group">
+          <label for="descripcion-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="activityIn.descripcion" name="descripcion" id="descripcion-txt" aria-describedby="descripcion-txt" placeholder="Descripción de la actividad" required>
+          <small id="descripcion-txt" class="form-text text-muted">Descripción de la actividad a realizar.</small>
+        </div>
+      </div>
+    </div>
+    <div class="card card-outline-primary">
+      <div class="card-header card-success">Labores</div> 
+      <div class="card-block">
+        <div class="form-group">
+          <label for="nombre-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="activityIn.nombre" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre de la actividad" required>
+          <small id="nombre-txt" class="form-text text-muted">Nombre descriptivo de la actividad a realizar.</small>
+        </div>
+        <div class="form-group">
+          <label for="descripcion-txt">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="activityIn.descripcion" name="descripcion" id="descripcion-txt" aria-describedby="descripcion-txt" placeholder="Descripción de la actividad" required>
+          <small id="descripcion-txt" class="form-text text-muted">Descripción de la actividad a realizar.</small>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="view=='create_activity'">Crear Actividad</button>
+    <button type="submit" class="btn btn-success" *ngIf="view=='edit_activity'">Editar Actividad</button>
+    <button type="button" class="btn btn-warning" (click)="view='create'">Volver</button>
+  </form>
+  
 </div>

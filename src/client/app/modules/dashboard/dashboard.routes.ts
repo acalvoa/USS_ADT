@@ -1,5 +1,5 @@
 import { Route} from '@angular/router';
-import { HomeRoutes } from './examples/home/index';
+import { HomeRoutes } from './home/index';
 import { GuardService } from '../../services/index';
 // import { ChartRoutes } from './examples/charts/index';
 // import { BlankPageRoutes } from './blank-page/index';
