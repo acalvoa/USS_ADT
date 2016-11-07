@@ -1,19 +1,46 @@
 .root{
 	width:100%;
+	.card-outline-success{
+		border-color:#5CB85C;
+	}
+	.card-outline-warning{
+		border-color: #F0AD4E;
+	}
+	.card-header{
+		color:#FFF;
+	}
+	.actions{
+		span{
+			cursor:pointer;
+		}
+	}
+	.categ_box{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		.categ_label{
+			display: flex;
+			padding:0px 3px;
+			width: auto;
+			text-align: center;
+			margin-right: 3px;
+			font-size: 0.6rem;
+		}
+	}
+	
+	.activi-table{
+		border: 1px solid #CCC;
+	}
+	.add-actividades{
+		display:flex;
+		flex-direction: column;
+		button{
+			width: 200px;
+		}
+	}
 }
 :host {
 	width:100%;
-}
-.card-outline-success{
-	border-color:#5CB85C;
-}
-.card-header{
-	color:#FFF;
-}
-.actions{
-	span{
-		cursor:pointer;
-	}
 }
 .categoria{
 	display: flex;
@@ -49,6 +76,39 @@
 			line-height: 30px;
 			border-radius:5px;
 			margin-right: 5px;
+		}
+	}
+}
+.fila_labor{
+	.card-warning{
+		display:flex;
+		flex-direction:row;
+		justify-content: flex-end;
+		.title{
+			display: flex;
+			width: calc(100% - 200px);
+		}
+		.addlabor{
+			display: flex;
+			width: 200px;
+			button{
+				height: 30px;
+				border: 1px solid #FFF;
+				background: transparent;
+				line-height: 30px;
+				padding:0 20px;
+			}
+		}
+	}
+	input{
+		width: 100%;
+		height: 38px;
+	}
+	.actions{
+		width: 30px;
+		span{
+			cursor:pointer;
+			font-size: 25px;
 		}
 	}
 }

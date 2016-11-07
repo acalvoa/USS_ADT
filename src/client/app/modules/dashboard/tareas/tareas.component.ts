@@ -11,14 +11,17 @@ import { RestService } from '../../../services/index';
 
 export class TareasComponent {
 	private rest:RestService;
+	private lastView:string;
 	private view:string;
 	private tareas:any[];
 	private sedes:any[];
 	private categorias:any[];
+	private lugares:any[];
 	private unidades:any[];
 	private dataEdit:any;
 	private dataIn:any;
 	private activityIn:Actividad;
+	private activityEdit:Actividad;
 	//CONSTRUCTOR
 	constructor(rest:RestService) {
 		this.view = 'visor';
@@ -31,6 +34,7 @@ export class TareasComponent {
 		this.rest.get('/tareas').subscribe(
 		    data => {
 		    	this.tareas = data;
+		    	console.log(data);
 		    },
 		    err => console.error(err)
 		);
@@ -60,20 +64,33 @@ export class TareasComponent {
 	save(event:any) {
 		event.preventDefault();
 		if(this.view === 'form') {
-			this.rest.post(this.dataIn, '/lugar').subscribe(
+			var save = JSON.parse(JSON.stringify(this.dataIn));
+			this.rest.post(save, '/tareas/createAdmin').subscribe(
 			    data => {
-			    	data.SEDE = this.searchSede(data.SEDE);
+			    	for(let i=0;i<this.unidades.length;i++){
+			    		if(this.unidades[i].ID_UNIDAD == this.dataIn.UNIDAD){
+			    			data.UNIDAD = this.unidades[i];
+			    			break;
+			    		}
+			    	}
+			    	data.CATEGORIA = this.dataIn.CATEGORIA;
 			    	this.tareas.push(data);
 			    	this.view = 'visor';
-			    	this.resetForm();
 			    },
 			    err => console.error(err)
 			);
 		}
 		if(this.view === 'edit') {
-			this.rest.put(this.dataEdit.ID_LUGAR, '/lugar', this.dataIn).subscribe(
+			var save = JSON.parse(JSON.stringify(this.dataIn));
+			this.rest.put(this.dataEdit.ID_TAREA, '/tareas/editAdmin', save).subscribe(
 			    data => {
-			    	this.tareas[this.tareas.indexOf(this.dataEdit)] = data;
+			    	for(let i=0;i<this.unidades.length;i++){
+			    		if(this.unidades[i].ID_UNIDAD == this.dataIn.UNIDAD){
+			    			this.dataIn.UNIDAD = this.unidades[i];
+			    			break;
+			    		}
+			    	}
+			    	this.tareas[this.tareas.indexOf(this.dataEdit)] = this.dataIn;
 			    	this.view = 'visor';
 			    	this.resetForm();
 			    },
@@ -88,28 +105,31 @@ export class TareasComponent {
 		return null;
 	}
 	goEdit(obj:any) {
+		this.resetForm();
 		this.dataEdit = obj;
-		this.dataIn.NOMBRE_LUGAR = obj.NOMBRE_LUGAR;
-		this.dataIn.SEDE = obj.SEDE.ID_SEDE;
+		this.dataIn = JSON.parse(JSON.stringify(obj));
+		this.dataIn.UNIDAD = this.dataIn.UNIDAD.ID_UNIDAD;
+		delete this.dataIn.ID_TAREA;
 		this.view = 'edit';
 	}
 	delete(obj:any) {
-		this.rest.delete(obj.ID_LUGAR, '/lugar').subscribe(
+		this.rest.delete(obj.ID_TAREA, '/tareas').subscribe(
 		    data => {
 		    	this.tareas.splice(this.tareas.indexOf(obj),1);
 		    },
 		    err => console.error(err)
 		);
 	}
-	addCategory(value:number){
+	addCategory(value:any) {
 		for(let i=0;i<this.categorias.length;i++){
-			if(this.categorias[i].ID_CATEGORIA == value){
-				if(this.dataIn.CATEGORIA.indexOf(this.categorias[i]) == -1){
+			if(this.categorias[i].ID_CATEGORIA == value.value){
+				if(this.dataIn.CATEGORIA.indexOf(this.categorias[i]) === -1){
 					this.dataIn.CATEGORIA.push(this.categorias[i]);	
 				}
 				break;
 			}
 		}
+		value.value = '';
 	}
 	resetForm() {
 		this.dataIn = {
@@ -121,22 +141,78 @@ export class TareasComponent {
 		};
 	}
 	goActivity() {
-		this.activityIn = new Actividad();
-		this.view = 'create_activity';
+		this.rest.get('/lugar/getbyuser').subscribe(
+		    data => {
+		    	this.lugares = data;
+		    	this.activityIn = new Actividad();
+		    	this.lastView = this.view;
+		    	this.view = 'create_activity';
+		    },
+		    err => console.error(err)
+		);
+	}
+	goEditAct(act:Actividad) {
+		this.rest.get('/lugar/getbyuser').subscribe(
+		    data => {
+		    	this.lugares = data;
+		    	this.activityEdit = act;
+		    	this.activityIn = new Actividad();
+		    	this.activityIn.NOMBRE = act.NOMBRE;
+		    	this.activityIn.ID_ACTIVIDAD = act.ID_ACTIVIDAD;
+		    	this.activityIn.DESCRIPCION = act.DESCRIPCION;
+		    	this.activityIn.TASKLIST = act.TASKLIST;
+		    	this.lastView = this.view;
+		    	this.view = 'edit_activity';
+		    },
+		    err => console.error(err)
+		);
+	}
+	saveActivity(event:any) {
+		event.preventDefault();
+		if(this.view === 'create_activity'){
+			this.dataIn.ACTIVIDADES.push(this.activityIn);
+			this.view = this.lastView;
+			this.activityIn = null;
+		}
+		if(this.view === 'edit_activity'){
+			this.dataIn.ACTIVIDADES[this.dataIn.ACTIVIDADES.indexOf(this.activityEdit)] = this.activityIn;
+			this.view = this.lastView;
+			this.activityIn = null;
+			this.activityEdit = null;
+		}
+		
+	}
+	deleteAct(labor:any) {
+		if(this.activityIn.TASKLIST.length > 1) this.activityIn.TASKLIST.splice(this.activityIn.TASKLIST.indexOf(labor),1);
+	}
+	deleteActivity(actividad:Actividad){
+		this.dataIn.ACTIVIDADES.splice(this.dataIn.ACTIVIDADES.indexOf(actividad),1);
+	}
+	newtarea(){
+		this.resetForm();
+		this.view = 'form';
 	}
 }
 class Task {
-	nombre:string;
-	lugar:number;
-	descripcion:string;
+	public LUGAR:string;
+	public DESCRIPCION:string;
+	constructor() {
+		this.LUGAR = '';
+		this.DESCRIPCION = '';
+	}
 }
 class Actividad {
-	nombre:string;
-	descripcion:string;
-	task:Task[];
-	constructor(){
-		this.nombre = '';
-		this.descripcion = '';
-		this.task = [];
+	public ID_ACTIVIDAD:number;
+	public NOMBRE:string;
+	public DESCRIPCION:string;
+	public TASKLIST:Task[];
+	constructor() {
+		this.NOMBRE = '';
+		this.DESCRIPCION = '';
+		this.TASKLIST = [];
+		this.nuevaLabor();
+	}
+	nuevaLabor() {
+		this.TASKLIST.push(new Task());
 	}
 }
