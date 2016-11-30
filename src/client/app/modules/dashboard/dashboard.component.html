@@ -4,6 +4,9 @@
 <div class="container-body">
 	<sidebar-cmp [isActive]="sidebar"></sidebar-cmp>
 	<section class="main-container" [ngClass]="{sidebarPushRight: isActive}">	
-		<router-outlet></router-outlet>
+		<router-outlet>
+		<!-- Mensaje de bienvenida al usuario -->
+			<h3>   Bienvenido {{ user.NAME }}  {{ user.LASTNAME }} </h3> 
+		</router-outlet>
 	</section>
 </div>
