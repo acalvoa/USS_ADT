@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
-
 import { ModulesModule } from './modules/modules.module';
 import { ServicesModule } from './services/services.module';
 import { SharedModule } from './shared/shared.module';

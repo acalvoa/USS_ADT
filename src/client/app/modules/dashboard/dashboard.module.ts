@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { DropdownModule } from 'ng2-bootstrap/ng2-bootstrap';
-import { ModalModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { DropdownModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ng2-bootstrap';
 import { HomeModule } from './home/home.module';
 import { DatatableModule } from '../../shared/index';
+import { InventarioModule } from './inventario/index';
 
 // import { ChartModule } from './examples/charts/chart.module';
 // import { BlankPageModule } from './blank-page/blankPage.module';
@@ -39,7 +40,8 @@ import {CategoriasModule} from './categorias/categorias.module';
         LugaresModule,
         DatatableModule,
         TareasModule,
-        CategoriasModule
+        CategoriasModule,
+        InventarioModule
     ],
     declarations: [DashboardComponent, NavbarComponent, SidebarComponent],
     exports: [DashboardComponent, NavbarComponent, SidebarComponent]

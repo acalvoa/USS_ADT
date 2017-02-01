@@ -1,0 +1,133 @@
+<!-- VISOR -->
+<div class="root" *ngIf="view=='visor'">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab === 'inventario'" (click)="tab='inventario'" data-toggle="tab" ole="tab">Inventario</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab === 'tipos'" (click)="tab='tipos'" data-toggle="tab" role="tab">Tipos</a>
+    </li>
+  </ul>
+  <br>
+  <div class="card card-outline-success" *ngIf="tab==='inventario'">
+    <div class="card-header card-success">Administrador de inventario</div> 
+    <table class="table table-striped">
+      <thead>
+        <th>Tipo</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Codigo</th>
+        <th>Observaciones</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inv of inventario">
+          <td>{{ inv.TIPO.NOMBRE }}</td>
+          <td>{{ inv.MARCA }}</td>
+          <td>{{ inv.MODELO }}</td>
+          <td>{{ inv.CODIGO }}</td>
+          <td>{{ inv.OBSERVACION }}</td>
+          <td class="actions">
+            <span (click)="goEdit(inv,'inv')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+            <span (click)="delete(inv,'inv')"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </td>
+        </tr>
+        <tr *ngIf="inventario && inventario.length == 0"><td colspan="3">No existen inventario registrados.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="btn btn-success" *ngIf="tab==='inventario'" (click)="showInv()">Crear Elemento</button>
+  <div class="card card-outline-success" *ngIf="tab==='tipos'">
+    <div class="card-header card-success" >Administrador de Tipos</div> 
+    <table class="table table-striped">
+      <thead>
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Descripcion</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tipo of tipos">
+          <td>{{ tipo.ID_CATEGORIA}}</td>
+          <td>{{ tipo.NOMBRE }}</td>
+          <td>{{ tipo.DESCRIPCION ? tipo.DESCRIPCION : "No Registra" }}</td>
+          <td class="actions">
+            <span (click)="goEdit(tipo,'tipo')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+            <span (click)="delete(tipo,'tipo')"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </td>
+        </tr>
+        <tr *ngIf="tipos && tipos.length == 0"><td colspan="3">No existen inventario registrados.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="btn btn-success" *ngIf="tab==='tipos'" (click)="showtipos()">Crear Categoria</button>
+</div>
+<!-- FORMULARIO -->
+<div class="root" *ngIf="view=='form_inv' || view=='edit_inv'">
+  <form (submit)="save($event, 'inventario')" #invform>
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Crear Lugar</div> 
+      <div class="card-block">
+        <!-- TIPOS -->
+        <div class="form-group">
+          <label for="sede-select">Sede</label>
+          <select class="form-control" id="sede-select" [(ngModel)]="dataIn.TIPO" name="sede" required>
+            <option value="">Seleccione el tipo</option>
+            <option *ngFor="let tipo of tipos" [value]="tipo.ID_CATEGORIA">{{ tipo.NOMBRE }}</option>
+          </select>
+          <small id="nombre-txt" class="form-text text-muted">Nombre del tipo de elemento. EJ: Laptop</small>
+        </div>
+        <!-- MARCA-->
+        <div class="form-group">
+          <label for="nombre-txt">Marca</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.MARCA" name="marca" id="marca-txt" aria-describedby="marca-txt" placeholder="Marca" required>
+          <small id="nombre-txt" class="form-text text-muted">Marca del elemento.</small>
+        </div>
+        <!-- MODELO -->
+        <div class="form-group">
+          <label for="nombre-txt">Modelo</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.MODELO" name="modelo" id="modelo-txt" aria-describedby="modelo-txt" placeholder="Modelo" required>
+          <small id="nombre-txt" class="form-text text-muted">Modelo del elemento de invetario</small>
+        </div>
+        <!-- CODIGO -->
+        <div class="form-group">
+          <label for="nombre-txt">Codigo</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.CODIGO" name="codigo" id="codigo-txt" aria-describedby="codigo-txt" placeholder="Codigo" required>
+          <small id="nombre-txt" class="form-text text-muted">Codigo general del elemento de inventario</small>
+        </div>
+        <!-- OBSERVACION -->
+        <div class="form-group">
+          <label for="nombre-txt">Observacion</label>
+          <textarea type="text" class="form-control" [(ngModel)]="dataIn.OBSERVACION" name="observacion" id="observacion-txt" aria-describedby="observacion-txt" placeholder="Observaciones"></textarea>
+          <small id="nombre-txt" class="form-text text-muted">Observaciones a anotar</small>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="view=='form_inv'">Crear Lugar</button>
+    <button type="submit" class="btn btn-success" *ngIf="view=='edit_inv'">Editar Lugar</button>
+    <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
+  </form>
+</div>
+<!-- FORMULARIO -->
+<div class="root" *ngIf="view=='form_tipos' || view=='edit_tipos'">
+  <form (submit)="save($event, 'tipo')" #tipoform>
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Crear Tipo</div> 
+      <div class="card-block">
+        <div class="form-group">
+          <label for="nombre-txt">Nombre del tipo</label>
+          <input type="text" class="form-control" [(ngModel)]="dataIn.NOMBRE" name="nombre" id="nombre-txt" aria-describedby="nombre-txt" placeholder="Nombre descriptivo" required>
+          <small id="nombre-txt" class="form-text text-muted">Nombre del tipo Ej: Laptop</small>
+        </div>
+        <div class="form-group">
+          <label for="nombre-txt">Descripción</label>
+          <textarea type="text" class="form-control" [(ngModel)]="dataIn.DESCRIPCION" name="descripcion" id="descripcion-txt" aria-describedby="descripcion-txt" placeholder="Descripción" ></textarea>
+          <small id="nombre-txt" class="form-text text-muted">Elementos descriptivos de la categoria</small>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success" *ngIf="view=='form_tipos'">Crear Lugar</button>
+    <button type="submit" class="btn btn-success" *ngIf="view=='edit_tipos'">Editar Lugar</button>
+    <button type="button" class="btn btn-warning" (click)="view='visor'">Volver</button>
+  </form>
+</div>

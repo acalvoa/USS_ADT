@@ -11,6 +11,7 @@ import { GuardService } from '../../services/index';
 
 import { DashboardComponent } from './index';
 import { UsersRoutes } from './users/index';
+import { InventarioRoutes } from './inventario/index';
 import { AreasRoutes } from './areas/index';
 import { LugaresRoutes } from './lugares/index';
 import { SedesRoutes } from './sedes/index';
@@ -29,7 +30,8 @@ export const DashboardRoutes: Route[] = [
         ...AreasRoutes,
         ...LugaresRoutes,
         ...TareasRoutes,
-        ...CategoriasRoutes
+        ...CategoriasRoutes,
+        ...InventarioRoutes
 	    	// ...ChartRoutes,
 	    	// ...BSComponentRoutes,
       //       ...TableRoutes,

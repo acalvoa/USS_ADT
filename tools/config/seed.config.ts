@@ -339,7 +339,7 @@ export class SeedConfig {
       '@angular/platform-browser-dynamic/testing':
         'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
-
+      'ng2-bootstrap/ng2-bootstrap': 'node_modules/ng2-bootstrap/ng2-bootstrap.js',
       'rxjs/*': 'node_modules/rxjs/*',
       'app/*': '/app/*',
       // For test config
@@ -376,6 +376,10 @@ export class SeedConfig {
     },
     packages: {
       '@angular/common': {
+        main: 'index.js',
+        defaultExtension: 'js'
+      },
+      'ng2-bootstrap/ng2-bootstrap':{
         main: 'index.js',
         defaultExtension: 'js'
       },
@@ -417,6 +421,10 @@ export class SeedConfig {
       },
       'rxjs': {
         main: 'Rx.js',
+        defaultExtension: 'js'
+      },
+      'ng2-auto-complete':{
+        main: 'ng2-auto-complete.umd.js', 
         defaultExtension: 'js'
       }
     }

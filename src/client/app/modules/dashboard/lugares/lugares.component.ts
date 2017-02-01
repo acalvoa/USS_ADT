@@ -16,9 +16,13 @@ export class LugaresComponent {
 	private sedes:any[];
 	private dataEdit:any;
 	private dataIn:any;
+	private tab:string;
+	private inventario:any[] = [{id:1,name:'perro'},{id:1,name:'gato'},{id:1,name:'conejo'}]
+	private l:any;
 	//CONSTRUCTOR
 	constructor(rest:RestService) {
 		this.view = 'visor';
+		this.tab = 'admin';
 		this.rest = rest;
 		this.fetch();
 		this.fetchSedes();
@@ -89,7 +93,11 @@ export class LugaresComponent {
 	resetForm() {
 		this.dataIn = {
 			NOMBRE_LUGAR: '',
-			SEDE: ''
+			SEDE: '',
+			INVENTARIO: []
 		};
+	}
+	deleteItem(item:any){
+		this.dataIn.INVENTARIO.splice(this.dataIn.INVENTARIO.indexOf(item),1);
 	}
 }

@@ -11,6 +11,7 @@ import { UserService } from '../../services/user/user.service';
 export class SidebarComponent {
 	@Input() isActive:boolean;
 	showMenu: string = '';
+	subshowMenu: string = '';
 	private admin:boolean;
 	// eventCalled() {
 	// 	this.isActive = !this.isActive;
@@ -23,6 +24,13 @@ export class SidebarComponent {
 			this.showMenu = '0';
 		} else {
 			this.showMenu = element;
+		}
+	}
+	addExpandSubClass(element: any) {
+		if (element === this.subshowMenu) {
+			this.subshowMenu = '0';
+		} else {
+			this.subshowMenu = element;
 		}
 	}
 }

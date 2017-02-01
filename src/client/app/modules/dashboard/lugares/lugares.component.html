@@ -1,5 +1,14 @@
 <!-- VISOR -->
 <div class="root" *ngIf="view=='visor'">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab === 'admin'" (click)="tab='admin'" data-toggle="tab" ole="tab">Administrador</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab === 'group'" (click)="tab='group'" data-toggle="tab" role="tab">Agrupaciones</a>
+    </li>
+  </ul>
+  <br>
   <div class="card card-outline-success">
     <div class="card-header card-success">Administrador de lugares</div> 
     <table class="table table-striped">
@@ -44,7 +53,39 @@
           </select>
           <small id="nombre-txt" class="form-text text-muted">Nombre de la sede a la que pertenece el lugar.</small>
         </div>
+        <div class="form-group">
+          <label for="inventario-txt">Inventario</label>
+          <div class="inventario">
+            <input class="form-control" ng2-auto-complete [(ngModel)]="l" [source]="inventario" value-property-name="key" display-property-name="name" name="inventario" id="inventario-txt" aria-describedby="inventario-txt" placeholder="Modelo o Codigo de Inventario">
+            <button>Agregar</button>
+          </div>
+          <small id="nombre-txt" class="form-text text-muted">Agregue elementos de inventario al lugar.</small>
+        </div>
       </div>
+    </div>
+    <div class="card card-outline-success">
+      <div class="card-header card-success">Inventario</div> 
+      <table class="table table-striped">
+        <thead>
+          <th>Tipo</th>
+          <th>Marca</th>
+          <th>Modelo</th>
+          <th>Codigo</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let elemento of dataIn.INVENTARIO">
+            <td>{{ elemento.TIPO.NOMBRE }}</td>
+            <td>{{ lugar.MARCA }}</td>
+            <td>{{ lugar.MODELO }}</td>
+            <td>{{ lugar.CODIGO }}</td>
+            <td class="actions">
+              <span (click)="deleteItem(elemento)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+            </td>
+          </tr>
+          <tr *ngIf="dataIn.INVENTARIO && dataIn.INVENTARIO.length == 0"><td colspan="3">No extisten elementos registrados.</td></tr>
+        </tbody>
+      </table>
     </div>
     <button type="submit" class="btn btn-success" *ngIf="view=='form'">Crear Lugar</button>
     <button type="submit" class="btn btn-success" *ngIf="view=='edit'">Editar Lugar</button>

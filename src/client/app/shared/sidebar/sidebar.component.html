@@ -108,6 +108,10 @@
                         <a [routerLink]="['/sedes']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-university" aria-hidden="true"></i> &nbsp; Administrar Sedes</span></a>
                     </li>
                     <li>
+                    <!-- administrar inventario -->
+                        <a [routerLink]="['/inventario']" [class.router-link-active]="subshowMenu === 'inventario'" href><span><i class="fa fa-exchange" aria-hidden="true"></i> &nbsp; Inventario</span></a>
+                    </li>
+                    <li>
                     <!-- administrar lugares -->
                         <a [routerLink]="['/lugares']" [routerLinkActive]="['router-link-active']" href><span><i class="fa fa-building" aria-hidden="true"></i> &nbsp; Administrar Lugares</span></a>
                     </li>

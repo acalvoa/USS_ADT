@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DropdownModule } from 'ng2-bootstrap';
 
 /**
 * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -10,7 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     imports: [CommonModule,
-    	RouterModule, NgbModule.forRoot()],
+    	RouterModule, DropdownModule.forRoot()],
     declarations: [],
     exports: [CommonModule, FormsModule, RouterModule]
 })
