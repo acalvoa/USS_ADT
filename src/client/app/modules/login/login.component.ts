@@ -17,6 +17,7 @@ export class LoginComponent {
 	private password:string;
 	private user:UserService;
 	private router:Router;
+	private error:String;
 
 	constructor(user:UserService, router:Router) {
 		this.user = user;
@@ -27,6 +28,7 @@ export class LoginComponent {
 		this.user.login(this.email,this.password)
 		.subscribe(
 		    data => {
+		    	if(data != true) this.error = data; 
 		    	this.router.navigateByUrl('/');
 		    },
 		    err => console.error(err)

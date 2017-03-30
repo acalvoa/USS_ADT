@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RestService } from '../../../services/index';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
 	moduleId: module.id,
@@ -17,8 +18,8 @@ export class LugaresComponent {
 	private dataEdit:any;
 	private dataIn:any;
 	private tab:string;
-	private inventario:any[] = [{id:1,name:'perro'},{id:1,name:'gato'},{id:1,name:'conejo'}]
-	private l:any;
+	private inv:any[];
+	private selected_inv:any;
 	//CONSTRUCTOR
 	constructor(rest:RestService) {
 		this.view = 'visor';
@@ -35,8 +36,14 @@ export class LugaresComponent {
 		    },
 		    err => console.error(err)
 		);
+		this.rest.get('/inventario/getallbytag').subscribe(
+		    data => {
+		    	this.inv = data;
+		    },
+		    err => console.error(err)
+		);
 	}
-	fetchSedes() {
+	fetchSedes(sea:string) {
 		this.rest.get('/sedes').subscribe(
 		    data => {
 		    	if(data.response === 200) {
@@ -46,10 +53,41 @@ export class LugaresComponent {
 		    err => console.error(err)
 		);
 	}
+	inventario(search:string){
+		return this.inv;
+		// return this.rest.getWithParam({
+		// 	search: search
+		// },'/inventario/getbytag').subscribe(
+		//     data => {
+		//     	if(data.response === 200) {
+		//     		this.sedes = data.sedes;
+		//     	}
+		//     },
+		//     err => console.error(err)
+		// );
+	}
+	addinv(){
+		if(this.selected_inv){
+			return this.rest.get('/inventario/'+this.selected_inv.key).subscribe(
+			    data => {
+			    	this.dataIn.INVENTARIO.push(data);
+			    },
+			    err => console.error(err)
+			);
+		}
+		return null;
+	}
 	save(event:any) {
 		event.preventDefault();
 		if(this.view === 'form') {
-			this.rest.post(this.dataIn, '/lugar').subscribe(
+			var obj = JSON.parse(JSON.stringify(this.dataIn));
+			var inv:any[] = [];
+			for(let i=0;i<obj.INVENTARIO.length;i++){
+				inv.push(obj.INVENTARIO[i].ID_INVENTARIO);
+			}
+			obj.INVENTARIO = inv;
+			console.log(obj);
+			this.rest.post(obj, '/lugar').subscribe(
 			    data => {
 			    	data.SEDE = this.searchSede(data.SEDE);
 			    	this.lugares.push(data);

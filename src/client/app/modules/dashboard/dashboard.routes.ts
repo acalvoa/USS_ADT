@@ -32,13 +32,6 @@ export const DashboardRoutes: Route[] = [
         ...TareasRoutes,
         ...CategoriasRoutes,
         ...InventarioRoutes
-	    	// ...ChartRoutes,
-	    	// ...BSComponentRoutes,
-      //       ...TableRoutes,
-	    	// ...BlankPageRoutes,
-      //       ...FormRoutes,
-      //       ...GridRoutes,
-      //       ...BSElementRoutes
     	],
       canActivate: [GuardService]
   	}

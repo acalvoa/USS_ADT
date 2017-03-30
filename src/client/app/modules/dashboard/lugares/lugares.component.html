@@ -56,8 +56,8 @@
         <div class="form-group">
           <label for="inventario-txt">Inventario</label>
           <div class="inventario">
-            <input class="form-control" ng2-auto-complete [(ngModel)]="l" [source]="inventario" value-property-name="key" display-property-name="name" name="inventario" id="inventario-txt" aria-describedby="inventario-txt" placeholder="Modelo o Codigo de Inventario">
-            <button>Agregar</button>
+            <input class="form-control" ng2-auto-complete #invsearch [(ngModel)]="selected_inv" [source]="inventario(invsearch.value)" value-property-name="key" display-property-name="name" name="inventario" id="inventario-txt" aria-describedby="inventario-txt" placeholder="Modelo o Codigo de Inventario">
+            <button type="button" (click)="addinv()">Agregar</button>
           </div>
           <small id="nombre-txt" class="form-text text-muted">Agregue elementos de inventario al lugar.</small>
         </div>
@@ -74,11 +74,11 @@
           <th></th>
         </thead>
         <tbody>
-          <tr *ngFor="let elemento of dataIn.INVENTARIO">
+          <tr *ngFor="let elemento of this.dataIn.INVENTARIO">
             <td>{{ elemento.TIPO.NOMBRE }}</td>
-            <td>{{ lugar.MARCA }}</td>
-            <td>{{ lugar.MODELO }}</td>
-            <td>{{ lugar.CODIGO }}</td>
+            <td>{{ elemento.MARCA }}</td>
+            <td>{{ elemento.MODELO }}</td>
+            <td>{{ elemento.CODIGO }}</td>
             <td class="actions">
               <span (click)="deleteItem(elemento)"><i class="fa fa-trash" aria-hidden="true"></i></span>
             </td>

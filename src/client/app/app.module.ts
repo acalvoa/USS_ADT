@@ -8,6 +8,7 @@ import { routes } from './app.routes';
 import { ModulesModule } from './modules/modules.module';
 import { ServicesModule } from './services/services.module';
 import { SharedModule } from './shared/shared.module';
+import { AlertsComponent } from './modules/alerts/alerts.component';
 
 @NgModule({
 	imports: [
@@ -18,7 +19,7 @@ import { SharedModule } from './shared/shared.module';
 		SharedModule,
 		ServicesModule
 	],
-	declarations: [AppComponent],
+	declarations: [AppComponent,AlertsComponent],
 	providers: [{
 		provide: APP_BASE_HREF,
 		useValue: '<%= APP_BASE %>'
